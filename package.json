@@ -1,0 +1,31 @@
+{
+  "name": "microfronts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "develop": "webpack-dev-server --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kybasas/microfrontends.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kybasas/microfrontends/issues"
+  },
+  "homepage": "https://github.com/kybasas/microfrontends#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "5.5.0",
+    "ts-loader": "^9.4.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "typescript": "^4.9.5"
+  }
+}
