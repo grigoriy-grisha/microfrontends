@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 
 const path = require('path');
 
@@ -64,13 +65,21 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve('dist'),
+        filename: '[name].[hash].js',
+        chunkFilename: '[id].js',
         assetModuleFilename: 'assets/[hash][ext][query]', // Все ассеты будут
-        // складываться в dist/assets
         clean: true,
     },
 
     plugins: [
+        new WebpackManifestPlugin({
+            fileName: 'import-map.json',
+            generate: (_,__,entries) => {
+                return Object.fromEntries((Object.entries(entries).map(([key, [path]]) => [key, path])))
+            }
+
+        }),
         new HtmlWebpackPlugin({
             title: 'our project',
             template: 'index.html'
@@ -82,7 +91,7 @@ module.exports = {
     ],
 
     devServer: {
-        static: path.join(__dirname, "dist"),
+        static: path.join("dist"),
         compress: true,
         port: 4000,
         hot: true,
