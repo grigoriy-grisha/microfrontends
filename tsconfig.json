@@ -3,7 +3,7 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "target": "es5",
-    "module": "es6",
+    "module": "es2020",
     "jsx": "react",
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true
