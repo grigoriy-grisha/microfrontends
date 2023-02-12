@@ -20,7 +20,9 @@ class WebpackConfigBuilder {
       new WebpackManifestPlugin({
         fileName: "import-map.json",
         generate: (_, __, entries) => ({
-          [name]: path.join(basePath, entries.main[0]),
+          imports: {
+            [name]: path.join(basePath, entries.main[0]),
+          }
         }),
       })
     );

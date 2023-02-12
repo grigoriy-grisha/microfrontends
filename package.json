@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tool:start": "node ../tool start",
-    "tool:build": "node ../tool build",
+    "tool:start": "node tool start",
+    "tool:build": "node tool build",
     "start": "cross-env SERVE=true webpack serve",
     "build": "webpack",
     "build-prod": "webpack --mode=production",
