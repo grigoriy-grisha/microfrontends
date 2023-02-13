@@ -21,7 +21,7 @@ if (process.env.SERVE) {
 module.exports = {
   mode,
   target,
-  entry: path.resolve("src/index.tsx"),
+  entry: {},
   module: {
     rules: [
       {
@@ -66,7 +66,7 @@ module.exports = {
   },
   output: {
     path: path.resolve("dist"),
-    filename: "[name].[hash].js",
+    filename: "[id].[hash].js",
     chunkFilename: "[id].js",
     assetModuleFilename: "assets/[hash][ext][query]", // Все ассеты будут
     clean: true,
