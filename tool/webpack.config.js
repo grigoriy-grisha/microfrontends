@@ -22,6 +22,11 @@ module.exports = {
   mode,
   target,
   entry: {},
+  devtool: false,
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+  },
   module: {
     rules: [
       {
@@ -69,6 +74,7 @@ module.exports = {
     filename: "[id].[hash].js",
     chunkFilename: "[id].js",
     assetModuleFilename: "assets/[hash][ext][query]", // Все ассеты будут
+    library: { type: "system" },
     clean: true,
   },
 

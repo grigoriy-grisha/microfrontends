@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
-ReactDOM.render(<div>hello 2</div>, document.querySelector("#root"));
+export const App = () => {
+  return <div>asd</div>;
+};
