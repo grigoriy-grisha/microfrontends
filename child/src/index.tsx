@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
-export const App = () => {
+const App = () => {
   return <div>asd</div>;
 };
+
+export default App;

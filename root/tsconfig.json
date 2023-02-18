@@ -3,9 +3,9 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "target": "es5",
-    "module": "es2020",
+    "module": "ES2020",
     "jsx": "react",
-    "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false
   }
 }

@@ -35,6 +35,7 @@
     "react-refresh": "^0.14.0",
     "sass": "^1.58.0",
     "sass-loader": "^13.2.0",
+    "systemjs-webpack-interop": "^2.3.7",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",
     "webpack": "^5.75.0",
@@ -43,6 +44,8 @@
     "webpack-manifest-plugin": "^5.0.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.4"
+    "copy-webpack-plugin": "^11.0.0",
+    "prettier": "^2.8.4",
+    "systemjs": "^6.13.0"
   }
 }

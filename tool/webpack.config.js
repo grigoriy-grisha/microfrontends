@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const SystemJSPublicPathPlugin = require("systemjs-webpack-interop/SystemJSPublicPathWebpackPlugin");
 
 const path = require("path");
 
@@ -24,8 +25,8 @@ module.exports = {
   entry: {},
   devtool: false,
   externals: {
-    react: "React",
-    "react-dom": "ReactDOM",
+    react: "react",
+    "react-dom": "react-dom",
   },
   module: {
     rules: [
@@ -66,21 +67,30 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    splitChunks: {
+      chunks: "async",
+    },
+  },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
   output: {
+    publicPath: "",
     path: path.resolve("dist"),
     filename: "[id].[hash].js",
     chunkFilename: "[id].js",
     assetModuleFilename: "assets/[hash][ext][query]", // Все ассеты будут
-    library: { type: "system" },
+    libraryTarget: "system",
     clean: true,
   },
 
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css", // Формат имени файла
+    }),
+    new SystemJSPublicPathPlugin({
+      systemjsModuleName: "@org-name/project-name",
     }),
     ...plugins,
   ],
