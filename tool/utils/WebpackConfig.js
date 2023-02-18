@@ -113,7 +113,23 @@ class WebpackConfigBuilder {
         fileName: `importmap.json`,
         generate: (_, file, entries) => ({
           imports: {
-            ["app"]: entries["main"][0],
+            ["app"]: "/" + entries["main"][0],
+          },
+        }),
+      })
+    );
+
+    this.config.plugins.push(
+      new WebpackManifestPlugin({
+        map: (file) => {
+          return file;
+        },
+        useEntryKeys: true,
+        fileName: `core-importmap.json`,
+        generate: () => ({
+          imports: {
+            react: "/umd/react.production.min.js",
+            "react-dom": "/umd/react-dom.production.min.js",
           },
         }),
       })
