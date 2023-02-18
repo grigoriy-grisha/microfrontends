@@ -17,6 +17,7 @@ async function startWebpack(options) {
         .setOutputFileName(moduleConfig.name)
         .generateImportMap(moduleConfig.name, moduleConfig.basePath)
         .setOutputPublicPath(moduleConfig.basePath)
+        .addCdnSyStemJs()
         .useHtml()
         .getConfig()
     )

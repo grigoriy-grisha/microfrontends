@@ -1,7 +1,46 @@
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { re } = require("@babel/core/lib/vendor/import-meta-resolve");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+
+const copyPatterns = (outDir, modules) => {
+  return modules.reduce(
+    (acc, module) => [
+      ...acc,
+      {
+        from: `node_modules/${module.name}/${module.path}`,
+        to: `${module.path}`,
+      },
+    ],
+    []
+  );
+};
+
+const cdnList = [
+  {
+    name: "systemjs",
+    var: "systemjs",
+    path: "dist/system.min.js",
+  },
+  {
+    name: "systemjs",
+    var: "amd",
+    path: "dist/extras/amd.min.js",
+  },
+  {
+    name: "systemjs",
+    var: "named-exports",
+    path: "dist/extras/named-exports.min.js",
+  },
+];
+
+const modules = [
+  { name: "react", path: "umd/react.production.min.js" },
+  {
+    name: "react-dom",
+    path: "umd/react-dom.production.min.js",
+  },
+];
 
 class WebpackConfigBuilder {
   constructor(config, options) {
@@ -41,8 +80,7 @@ class WebpackConfigBuilder {
   }
 
   generateImportMap(name) {
-    if (this.options.root) return this;
-
+    // if (this.options.root) return this;
     const entryKeys = Object.keys(this.config.entry);
 
     entryKeys.forEach((key) => {
@@ -53,7 +91,7 @@ class WebpackConfigBuilder {
               return file;
             },
             useEntryKeys: true,
-            fileName: `${key}import-map.json`,
+            fileName: `${key}importmap.json`,
             generate: (_, file, entries) => ({
               imports: Object.fromEntries(
                 Object.entries(entries)
@@ -66,6 +104,21 @@ class WebpackConfigBuilder {
       }
     });
 
+    this.config.plugins.push(
+      new WebpackManifestPlugin({
+        map: (file) => {
+          return file;
+        },
+        useEntryKeys: true,
+        fileName: `importmap.json`,
+        generate: (_, file, entries) => ({
+          imports: {
+            ["app"]: entries["main"][0],
+          },
+        }),
+      })
+    );
+
     return this;
   }
 
@@ -75,8 +128,28 @@ class WebpackConfigBuilder {
     this.config.plugins.push(
       new HtmlWebpackPlugin({
         template: "../root/index.html",
+        chunks: [],
+        templateParameters: (options) => {
+          const mainScript = Object.keys(options.assets).find((script) =>
+            script.startsWith("main")
+          );
+
+          return { mainScript };
+        },
       })
     );
+    return this;
+  }
+
+  addCdnSyStemJs() {
+    // if (!this.options.root) return this;
+
+    this.config.plugins.push(
+      new CopyWebpackPlugin({
+        patterns: [...copyPatterns("./", [...cdnList, ...modules])],
+      })
+    );
+
     return this;
   }
 }

@@ -1,12 +1,14 @@
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
-import "systemjs";
+import { createRoot } from "react-dom/client";
 
 const Component = React.lazy(() => import("./Component").then((c) => c));
 
-ReactDOM.render(
+const domNode = document.getElementById("root");
+const root = createRoot(domNode);
+
+root.render(
   <Suspense fallback={null}>
+    <div>ad</div>
     <Component />
-  </Suspense>,
-  document.querySelector("#root")
+  </Suspense>
 );

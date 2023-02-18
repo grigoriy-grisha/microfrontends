@@ -45,6 +45,7 @@ async function buildWebpack(options) {
       .addEntry(moduleConfig.basePath, "./")
       .setOutputFileName(moduleConfig.name)
       .generateImportMap(moduleConfig.name)
+      .addCdnSyStemJs()
       .setOutputPublicPath(moduleConfig.basePath)
       .useHtml()
       .getConfig()
