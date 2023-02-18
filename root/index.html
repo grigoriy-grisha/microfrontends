@@ -9,16 +9,10 @@
     <script src="/dist/system.min.js"></script>
     <script src="/dist/extras/amd.min.js"></script>
     <script src="/dist/extras/named-exports.min.js"></script>
-    <script type="systemjs-importmap">
-        {
-          "imports": {
-            "react": "/umd/react.production.min.js",
-            "react-dom": "/umd/react-dom.production.min.js"
-          }
-        }
-    </script>
+    <script src="/importmap.json" type="systemjs-importmap"></script>
+    <script src="/core-importmap.json" type="systemjs-importmap"></script>
     <script>
-        System.import("/<%= mainScript %>")
+        System.import("app")
     </script>
 </head>
 <body>

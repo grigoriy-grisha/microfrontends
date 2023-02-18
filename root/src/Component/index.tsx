@@ -52,7 +52,7 @@ function Component() {
         // setComponent(a);
 
         const Module = lazy(async () => {
-          const application = await System.import(
+          const application = await (window as any).System.import(
             `/${res.imports["micro/path/"]}`
           ).then(
             (r) => r,
