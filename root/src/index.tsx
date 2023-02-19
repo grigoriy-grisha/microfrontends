@@ -8,7 +8,7 @@ const root = createRoot(domNode);
 
 root.render(
   <Suspense fallback={null}>
-    <div>ad</div>
     <Component />
+    ROOT
   </Suspense>
 );

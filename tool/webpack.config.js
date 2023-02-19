@@ -1,8 +1,5 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
-const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
-const SystemJSPublicPathPlugin = require("systemjs-webpack-interop/SystemJSPublicPathWebpackPlugin");
 
 const path = require("path");
 
@@ -88,9 +85,6 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css", // Формат имени файла
-    }),
-    new SystemJSPublicPathPlugin({
-      systemjsModuleName: "@org-name/project-name",
     }),
     ...plugins,
   ],
