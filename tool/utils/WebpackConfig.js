@@ -1,10 +1,10 @@
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { ModuleConfig } = require("./ModuleConfig");
 const { cdnList } = require("./cdnList");
 const { copyPatterns } = require("./copyPatterns");
+const { headScripts } = require("./tempalateContent");
 
 class WebpackConfigBuilder {
   constructor(config) {
@@ -92,15 +92,9 @@ class WebpackConfigBuilder {
 
     this.config.plugins.push(
       new HtmlWebpackPlugin({
-        template: `${rooModule.path}/index.html`,
+        template: `${rooModule.path}/index.ejs`,
         chunks: [],
-        templateParameters: (options) => {
-          const mainScript = Object.keys(options.assets).find((script) =>
-            script.startsWith(rooModule.name)
-          );
-
-          return { mainScript };
-        },
+        headScripts,
       })
     );
 
