@@ -4,5 +4,8 @@ module.exports = {
   host: "localhost",
   basePath: "micro/path/",
 
-  modules: [{ name: "../root", root: true, local: true }],
+  modules: [
+    { path: "../root", root: true, local: true },
+    { path: "../child-2/" },
+  ],
 };

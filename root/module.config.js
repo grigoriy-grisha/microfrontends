@@ -1,6 +1,8 @@
 module.exports = {
-    name: 'micro',
-    port: 1337,
-    host: 'localhost',
-    basePath: "/micro/path/"
-}
+  name: "root",
+  port: 1337,
+  root: true,
+  host: "localhost",
+  basePath: "",
+  modules: [],
+};

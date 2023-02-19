@@ -6,18 +6,18 @@ const config = require("../webpack.config");
 const { readModuleConfig } = require("../utils/readModuleConfig");
 const { WebpackConfigBuilder } = require("../utils/WebpackConfig");
 
-async function startWebpack(options) {
+async function startWebpack() {
   const moduleConfig = readModuleConfig();
 
   await new WebpackDevServer(
     webpack(
-      new WebpackConfigBuilder(config, options)
-        .addRootEntry(moduleConfig.modules[0].name)
-        .addEntry(moduleConfig.basePath, "./")
-        .setOutputFileName(moduleConfig.name)
-        .generateImportMap(moduleConfig.name, moduleConfig.basePath)
-        .setOutputPublicPath(moduleConfig.basePath)
-        .addCdnSyStemJs()
+      new WebpackConfigBuilder(config)
+        .addRootEntry()
+        .addEntry()
+        .setOutputFileName()
+        .generateImportMap()
+        .addCdnSystemJs()
+        .setOutputPublicPath()
         .useHtml()
         .getConfig()
     )
