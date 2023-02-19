@@ -17,7 +17,6 @@ class WebpackConfigBuilder {
     const rootPath = this.moduleConfig.getRootModule().path;
     this.config.entry.main = `${rootPath}src/index.tsx`;
 
-    console.log(this.config.entry);
     return this;
   }
 
