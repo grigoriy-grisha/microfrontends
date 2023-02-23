@@ -5,7 +5,7 @@ module.exports = {
   basePath: "micro/path/",
 
   modules: [
-    { path: "../root", root: true, local: true },
+    { path: "../root/", root: true },
     { path: "../child-2/" },
   ],
 };

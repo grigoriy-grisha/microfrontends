@@ -1,10 +1,12 @@
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const urlJoin = require("url-join");
+
 const { ModuleConfig } = require("./ModuleConfig");
 const { cdnList } = require("./cdnList");
 const { copyPatterns } = require("./copyPatterns");
-const { headScripts } = require("./tempalateContent");
+const { headScripts } = require("./headScripts");
 
 class WebpackConfigBuilder {
   constructor(config) {
@@ -15,14 +17,14 @@ class WebpackConfigBuilder {
 
   addRootEntry() {
     const rootPath = this.moduleConfig.getRootModule().path;
-    this.config.entry.main = `${rootPath}src/index.tsx`;
+    this.config.entry.main = urlJoin(rootPath, "src/index.tsx");
 
     return this;
   }
 
   addEntry() {
     this.moduleConfig.getDeployModules().forEach(({ path, basePath }) => {
-      this.config.entry[basePath] = `${path}src/index.tsx`;
+      this.config.entry[basePath] = urlJoin(path, "src/index.tsx");
     });
 
     return this;
@@ -78,7 +80,7 @@ class WebpackConfigBuilder {
     this.moduleConfig.getDeployModules().forEach(({ basePath, name }) => {
       this.config.plugins.push(
         new WebpackManifestPlugin({
-          fileName: `${basePath}/importmap.json`,
+          fileName: urlJoin(basePath, "importmap.json"),
           generate: (_, file, entries) => ({
             imports: { [name]: `/${entries[basePath][0]}` },
           }),
@@ -92,9 +94,10 @@ class WebpackConfigBuilder {
 
     this.config.plugins.push(
       new HtmlWebpackPlugin({
-        template: `${rooModule.path}/index.ejs`,
+        template: urlJoin(rooModule.path, "index.html"),
         chunks: [],
         headScripts,
+        templateParameters: () => ({ headScripts }),
       })
     );
 

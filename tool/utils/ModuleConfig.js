@@ -1,5 +1,7 @@
-const { readModuleConfig } = require("./readModuleConfig");
 const path = require("path");
+const urlJoin = require("url-join");
+
+const { readModuleConfig } = require("./readModuleConfig");
 
 class ModuleConfig {
   constructor() {
@@ -57,11 +59,7 @@ class ModuleConfig {
   }
 
   mapModuleConfigToDeployModule({ name, basePath, path }) {
-    return {
-      name,
-      basePath,
-      path,
-    };
+    return { name, basePath, path };
   }
 
   collectModulesConfigs() {
@@ -70,7 +68,7 @@ class ModuleConfig {
     const collectedModules = [];
     for (const module of modules) {
       const moduleInfo = require(path.resolve(
-        `${module.path}/module.config.js`
+        urlJoin(module.path, "module.config.js")
       ));
 
       collectedModules.push({ ...moduleInfo, path: module.path });
