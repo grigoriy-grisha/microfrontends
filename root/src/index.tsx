@@ -9,6 +9,6 @@ const root = createRoot(domNode);
 root.render(
   <Suspense fallback={null}>
     <Component />
-    ROOT
+    ROOT App
   </Suspense>
 );

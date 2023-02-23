@@ -29,7 +29,14 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+        use: [
+          {
+            loader: path.join(__dirname, "node_modules", "ts-loader"),
+            options: {
+              configFile: path.resolve("tsconfig.json"),
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {

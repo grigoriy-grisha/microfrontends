@@ -3,5 +3,5 @@ module.exports = {
   port: 1337,
   host: "localhost",
   basePath: "micro-2/path/",
-  modules: [{ path: "../root", root: true, local: true }],
+  modules: [{ path: "../root", root: true }],
 };
