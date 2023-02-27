@@ -15,6 +15,10 @@ class ModuleConfig {
     this.collectModulesConfigs();
   }
 
+  getBasePath() {
+    return this.moduleConfig.basePath;
+  }
+
   getPort() {
     return this.moduleConfig.port || 8080;
   }

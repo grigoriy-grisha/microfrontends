@@ -6,6 +6,7 @@
   "scripts": {
     "tool:start": "node ../tool sw",
     "tool:build": "node ../tool bw",
+    "tool:build:dev": "node ../tool bw --dev",
     "start": "cross-env SERVE=true webpack serve",
     "build": "webpack",
     "build-prod": "webpack --mode=production",
