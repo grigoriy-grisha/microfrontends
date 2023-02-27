@@ -1,54 +1,55 @@
+const urlJoin = require("url-join");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const urlJoin = require("url-join");
 
-const { ModuleConfig } = require("./ModuleConfig");
-const { cdnList } = require("./cdnList");
-const { copyPatterns } = require("./copyPatterns");
-const { headScripts } = require("./headScripts");
+const { headScripts } = require("../headScripts");
+const { copyPatterns } = require("../copyPatterns");
+const { cdnList } = require("../cdnList");
+const { ModuleConfig } = require("../ModuleConfig");
 
-class WebpackConfigBuilder {
+class WebpackDevConfig {
   constructor(config) {
     this.moduleConfig = new ModuleConfig();
 
     this.config = config;
+
+    this.init();
   }
 
-  addRootEntry() {
-    const rootPath = this.moduleConfig.getRootModule().path;
-    this.config.entry.main = urlJoin(rootPath, "src/index.tsx");
-
-    return this;
-  }
-
-  addEntry() {
-    this.moduleConfig.getDeployModules().forEach(({ path, basePath }) => {
-      this.config.entry[basePath] = urlJoin(path, "src/index.tsx");
-    });
-
-    return this;
+  init() {
+    this.addRootEntry();
+    this.addEntry();
+    this.setOutputFileName();
+    this.generateImportMap();
+    this.addCdnSystemJs();
+    this.useHtml();
+    this.getConfig();
   }
 
   getConfig() {
     return this.config;
   }
 
-  setOutputFileName() {
-    this.config.output.filename = `[name].[hash].js`;
-    return this;
+  addRootEntry() {
+    const rootPath = this.moduleConfig.getRootModule().path;
+    this.config.entry.main = urlJoin(rootPath, "src/index.tsx");
   }
 
-  setOutputPublicPath() {
-    return this;
+  addEntry() {
+    this.moduleConfig.getDeployModules().forEach(({ path, basePath }) => {
+      this.config.entry[basePath] = urlJoin(path, "src/index.tsx");
+    });
+  }
+
+  setOutputFileName() {
+    this.config.output.filename = `[name].[hash].js`;
   }
 
   generateImportMap() {
     this.generateModulesImportmaps();
     this.generateMainImportmap();
     this.generateCoreImportmap();
-
-    return this;
   }
 
   generateMainImportmap() {
@@ -100,19 +101,13 @@ class WebpackConfigBuilder {
         templateParameters: () => ({ headScripts }),
       })
     );
-
-    return this;
   }
 
   addCdnSystemJs() {
     this.config.plugins.push(
       new CopyWebpackPlugin({ patterns: [...copyPatterns("./", cdnList)] })
     );
-
-    return this;
   }
 }
 
-module.exports = {
-  WebpackConfigBuilder,
-};
+module.exports = { WebpackDevConfig };

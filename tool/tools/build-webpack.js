@@ -1,23 +1,22 @@
-const webpack = require("webpack");
+const Webpack = require("webpack");
 
-const { readModuleConfig } = require("../utils/readModuleConfig");
-const { WebpackConfigBuilder } = require("../utils/WebpackConfig");
 const config = require("../webpack.config");
 
-async function buildWebpack(options) {
-  const compiler = webpack(
-    new WebpackConfigBuilder(config, options)
-      .addRootEntry()
-      .addEntry()
-      .setOutputFileName()
-      .generateImportMap()
-      .addCdnSystemJs()
-      .setOutputPublicPath()
-      .useHtml()
-      .getConfig()
-  );
+const {
+  WebpackDevConfig,
+} = require("../utils/WebpackConfigs/WebpackDevConfig");
+const {
+  WebpackProdConfig,
+} = require("../utils/WebpackConfigs/WebpackProdConfig");
 
-  compiler.run((err, res) => {
+async function buildWebpack(options) {
+  console.log(options);
+
+  Webpack(
+    options.dev
+      ? new WebpackDevConfig(config).getConfig()
+      : new WebpackProdConfig(config).getConfig()
+  ).run((err, res) => {
     if (err) console.log(err);
   });
 }
