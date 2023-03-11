@@ -2,6 +2,7 @@ const urlJoin = require("url-join");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
 const { headScripts } = require("../headScripts");
 const { copyPatterns } = require("../copyPatterns");
@@ -25,6 +26,7 @@ class WebpackDevConfig {
     this.addCdnSystemJs();
     this.useHtml();
     this.getConfig();
+    this.addModulesToDist();
   }
 
   getConfig() {
@@ -37,13 +39,13 @@ class WebpackDevConfig {
   }
 
   addEntry() {
-    this.moduleConfig.getDeployModules().forEach(({ path, basePath }) => {
-      this.config.entry[basePath] = urlJoin(path, "src/index.tsx");
+    this.moduleConfig.getDeployModules().forEach(({ path, packageName }) => {
+      this.config.entry[packageName] = urlJoin(path, "src/index.tsx");
     });
   }
 
   setOutputFileName() {
-    this.config.output.filename = `[name].[hash].js`;
+    this.config.output.filename = `[name]/.[hash].js`;
   }
 
   generateImportMap() {
@@ -57,7 +59,7 @@ class WebpackDevConfig {
       new WebpackManifestPlugin({
         fileName: `importmap.json`,
         generate: (_, file, entries) => ({
-          imports: { ["app"]: `/${entries["main"][0]}` },
+          imports: { ["app"]: `./${entries["main"][0]}` },
         }),
       })
     );
@@ -78,12 +80,12 @@ class WebpackDevConfig {
   }
 
   generateModulesImportmaps() {
-    this.moduleConfig.getDeployModules().forEach(({ basePath, name }) => {
+    this.moduleConfig.getDeployModules().forEach(({ packageName, name }) => {
       this.config.plugins.push(
         new WebpackManifestPlugin({
-          fileName: urlJoin(basePath, "importmap.json"),
+          fileName: urlJoin(packageName, "importmap.json"),
           generate: (_, file, entries) => ({
-            imports: { [name]: `/${entries[basePath][0]}` },
+            imports: { [packageName]: `./${entries[packageName][0]}` },
           }),
         })
       );
@@ -106,6 +108,18 @@ class WebpackDevConfig {
   addCdnSystemJs() {
     this.config.plugins.push(
       new CopyWebpackPlugin({ patterns: [...copyPatterns("./", cdnList)] })
+    );
+  }
+
+  addModulesToDist() {
+    if (!this.moduleConfig.hasPackageModules()) return;
+
+    this.config.plugins.push(
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: path.resolve(process.cwd(), ".temp-packages"), to: "./" },
+        ],
+      })
     );
   }
 }

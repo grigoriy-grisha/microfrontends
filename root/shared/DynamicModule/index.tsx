@@ -1,23 +1,22 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import AsyncLoadModule from "../AsyncLoadModule";
 
 type DynamicModuleProps = {
-    path: string
-    name: string
+  packageName: string;
+  name?: string;
+};
+
+function DynamicModule({ packageName, name }: DynamicModuleProps) {
+  const [importPath, setImportPath] = useState("");
+
+  useEffect(() => {
+    fetch(`${packageName}/importmap.json`)
+      .then((response) => response.json())
+      .then(({ imports }) => imports[name || packageName])
+      .then(setImportPath);
+  }, []);
+
+  return <>{!!importPath && <AsyncLoadModule path={importPath} />}</>;
 }
 
-function DynamicModule({path, name}: DynamicModuleProps) {
-    const [importPath, setImportPath] = useState('')
-
-    useEffect(() => {
-        fetch(`${path}/importmap.json`)
-            .then(response => response.json())
-            .then(({imports}) => imports[name])
-            .then(setImportPath)
-
-    }, [])
-
-    return <>{!!importPath && <AsyncLoadModule path={importPath}/>}</>
-}
-
-export default DynamicModule
+export default DynamicModule;

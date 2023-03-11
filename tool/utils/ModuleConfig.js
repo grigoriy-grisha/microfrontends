@@ -35,6 +35,16 @@ class ModuleConfig {
     return this.deployModules;
   }
 
+  hasPackageModules() {
+    const packageModules = this.getPackageModules();
+
+    return packageModules && packageModules.length !== 0;
+  }
+
+  getPackageModules() {
+    return this.moduleConfig.packageModules;
+  }
+
   getRootModule() {
     if (this.moduleConfig.root) return { name: "main", path: "./" };
 
@@ -42,6 +52,10 @@ class ModuleConfig {
     if (!rootModule) throw new Error("Root module not a found!");
 
     return { name: "main", path: rootModule.path };
+  }
+
+  isSelfRoot() {
+    return !!this.moduleConfig.root;
   }
 
   findRootModule() {
@@ -53,7 +67,9 @@ class ModuleConfig {
 
     if (!this.moduleConfig.root) {
       modules.push(
-        this.mapModuleConfigToDeployModule({ ...this.moduleConfig, path: "./" })
+        this.mapModuleConfigToDeployModule(
+          this.collectModuleConfig({ ...this.moduleConfig, path: "./" })
+        )
       );
     }
 
@@ -62,8 +78,27 @@ class ModuleConfig {
       .concat(modules);
   }
 
-  mapModuleConfigToDeployModule({ name, basePath, path }) {
-    return { name, basePath, path };
+  getBuildPackageName() {
+    return require(path.resolve("package.json")).name;
+  }
+
+  mapModuleConfigToDeployModule({ name, basePath, path, packageName }) {
+    return { name, basePath, path, packageName };
+  }
+
+  collectModuleConfig(module) {
+    const moduleInfo = require(path.resolve(
+      urlJoin(module.path, "module.config.js")
+    ));
+    const packageName = require(path.resolve(
+      urlJoin(module.path, "package.json")
+    )).name;
+
+    return {
+      ...moduleInfo,
+      path: module.path,
+      packageName,
+    };
   }
 
   collectModulesConfigs() {
@@ -71,11 +106,7 @@ class ModuleConfig {
 
     const collectedModules = [];
     for (const module of modules) {
-      const moduleInfo = require(path.resolve(
-        urlJoin(module.path, "module.config.js")
-      ));
-
-      collectedModules.push({ ...moduleInfo, path: module.path });
+      collectedModules.push(this.collectModuleConfig(module));
     }
 
     return collectedModules;
