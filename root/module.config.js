@@ -5,4 +5,5 @@ module.exports = {
   host: "localhost",
   basePath: "",
   modules: [],
+  packageModules: ["@grigga/child-2@latest"],
 };

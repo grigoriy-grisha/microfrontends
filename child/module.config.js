@@ -5,4 +5,5 @@ module.exports = {
   basePath: "micro/path/",
 
   modules: [{ path: "../root/", root: true }, { path: "../child-2/" }],
+  packageModules: ["@grigga/child-2@latest"],
 };

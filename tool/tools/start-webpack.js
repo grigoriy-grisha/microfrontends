@@ -8,14 +8,19 @@ const {
   WebpackDevConfig,
 } = require("../utils/WebpackConfigs/WebpackDevConfig");
 
-const readline = require("readline");
+const { deployPackages } = require("../utils/deployPackages");
 
 async function startWebpack() {
   const moduleConfig = readModuleConfig();
 
-  await new WebpackDevServer(
-    Webpack(new WebpackDevConfig(config).getConfig())
-  ).listen(moduleConfig.port, moduleConfig.host);
+  if (moduleConfig.packageModules)
+    await deployPackages(moduleConfig.packageModules);
+
+  const compiler = Webpack(new WebpackDevConfig(config).getConfig());
+  await new WebpackDevServer(compiler).listen(
+    moduleConfig.port,
+    moduleConfig.host
+  );
 }
 
 module.exports = {
